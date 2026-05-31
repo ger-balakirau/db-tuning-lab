@@ -1,0 +1,11 @@
+# mysql 5.6
+
+Запуск:
+```bash
+cd engines/mysql/versions/5.6/tools
+./validate.sh
+```
+
+Состав:
+- conf.d/*.cnf — фрагменты
+- conf.d/profiles/*.cnf — профили по RAM

@@ -1,0 +1,4 @@
+[mysqld]
+# Base (safe defaults) — заготовка
+skip-name-resolve
+innodb_file_per_table=1

@@ -1,0 +1,4 @@
+[mysqld]
+# Observability — заготовка
+slow_query_log=1
+long_query_time=1

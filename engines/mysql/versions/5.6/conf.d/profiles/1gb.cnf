@@ -1,0 +1,3 @@
+[mysqld]
+# 1GB profile (пример)
+innodb_buffer_pool_size=256M

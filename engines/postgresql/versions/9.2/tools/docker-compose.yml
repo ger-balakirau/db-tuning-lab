@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:9.2
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ../conf:/etc/postgresql:ro
+      - ./data:/var/lib/postgresql/data
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
