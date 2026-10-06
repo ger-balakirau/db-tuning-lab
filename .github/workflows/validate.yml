@@ -13,3 +13,16 @@ jobs:
         run: make lint
       - name: Validate repository structure
         run: make test
+
+  runtime-smoke:
+    needs: structure
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show Docker versions
+        run: |
+          docker version
+          docker compose version
+      - name: Validate current database baselines
+        run: make validate-current PROFILE=1gb

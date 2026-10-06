@@ -85,7 +85,7 @@ make list
 
 ## Тесты и CI
 
-CI не поднимает все 30 контейнеров, чтобы не зависеть от старых Docker image tags и не тратить много времени на pull. Вместо этого он проверяет структуру, shell-синтаксис/ShellCheck, обязательные tuning-ключи, соответствие image tag версии директории и валидность `docker compose config` при наличии Compose.
+CI не поднимает все 30 контейнеров, чтобы не зависеть от старых Docker image tags и не тратить много времени на pull. Статический job проверяет структуру, shell-синтаксис/ShellCheck, обязательные tuning-ключи, соответствие image tag версии директории и `docker compose config`. Отдельный runtime-smoke job реально поднимает современные baseline-версии MySQL 8.4, MariaDB 11.4 и PostgreSQL 17 с профилем `1gb` и проверяет effective настройки.
 
 Подробности: [docs/testing.md](docs/testing.md).
 
