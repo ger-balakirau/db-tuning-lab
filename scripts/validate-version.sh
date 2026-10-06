@@ -60,7 +60,9 @@ version="$(basename -- "${target}")"
 profile="${PROFILE:-${DB_PROFILE:-1gb}}"
 
 case "${engine}" in
-  mysql|mariadb|postgresql) ;;
+  mysql) sql_client="mysql" ;;
+  mariadb) sql_client="mariadb" ;;
+  postgresql) sql_client="" ;;
   *) fail "Unsupported engine: ${engine}" ;;
 esac
 
@@ -90,7 +92,7 @@ ready=0
 for _ in $(seq 1 60); do
   case "${engine}" in
     mysql|mariadb)
-      if "${compose[@]}" exec -T db mysql -uroot -proot --batch --skip-column-names -e 'SELECT 1;' >/dev/null 2>&1; then
+      if "${compose[@]}" exec -T db "${sql_client}" -uroot -proot --batch --skip-column-names -e 'SELECT 1;' >/dev/null 2>&1; then
         ready=1
       fi
       ;;
@@ -118,13 +120,13 @@ case "${engine}" in
     [[ -n "${expected_pool}" ]] || fail "innodb_buffer_pool_size is missing in ${profile_file}"
     expected_pool_bytes="$(size_to_bytes "${expected_pool}")"
 
-    actual_pool="$("${compose[@]}" exec -T db mysql -uroot -proot --batch --skip-column-names -e 'SELECT @@innodb_buffer_pool_size;' | tr -d '\r' | tail -n1)"
+    actual_pool="$("${compose[@]}" exec -T db "${sql_client}" -uroot -proot --batch --skip-column-names -e 'SELECT @@innodb_buffer_pool_size;' | tr -d '\r' | tail -n1)"
     [[ "${actual_pool}" == "${expected_pool_bytes}" ]] || fail "profile not applied: innodb_buffer_pool_size=${actual_pool}, expected ${expected_pool_bytes}"
 
-    slow_log="$("${compose[@]}" exec -T db mysql -uroot -proot --batch --skip-column-names -e 'SELECT @@slow_query_log;' | tr -d '\r' | tail -n1)"
+    slow_log="$("${compose[@]}" exec -T db "${sql_client}" -uroot -proot --batch --skip-column-names -e 'SELECT @@slow_query_log;' | tr -d '\r' | tail -n1)"
     [[ "${slow_log}" == "1" ]] || fail "slow_query_log is not enabled"
 
-    "${compose[@]}" exec -T db mysql -uroot -proot -e \
+    "${compose[@]}" exec -T db "${sql_client}" -uroot -proot -e \
       'SELECT VERSION() AS version, @@innodb_buffer_pool_size AS buffer_pool_bytes, @@max_connections AS max_connections, @@slow_query_log AS slow_query_log, @@long_query_time AS long_query_time;'
     ;;
   postgresql)
