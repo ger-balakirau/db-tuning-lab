@@ -6,9 +6,9 @@ on:
 
 jobs:
   structure:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Lint shell scripts
         run: make lint
       - name: Validate repository structure
@@ -16,10 +16,10 @@ jobs:
 
   runtime-smoke:
     needs: structure
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Show Docker versions
         run: |
           docker version
