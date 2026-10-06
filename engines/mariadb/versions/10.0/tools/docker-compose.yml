@@ -4,9 +4,15 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - ../conf.d:/etc/mysql/conf.d:ro
+      - ../conf.d/00-base.cnf:/etc/mysql/conf.d/00-base.cnf:ro
+      - ../conf.d/10-observability.cnf:/etc/mysql/conf.d/10-observability.cnf:ro
+      - ../conf.d/profiles/${DB_PROFILE:-1gb}.cnf:/etc/mysql/conf.d/99-profile.cnf:ro
+      - db-data:/var/lib/mysql
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -uroot -proot --silent"]
       interval: 2s
       timeout: 2s
       retries: 30
+
+volumes:
+  db-data:

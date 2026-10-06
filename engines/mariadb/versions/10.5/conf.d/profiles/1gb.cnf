@@ -1,3 +1,8 @@
 [mysqld]
-# 1GB profile (пример)
+# 1 GB host: deliberately conservative to leave room for OS and application processes.
 innodb_buffer_pool_size=256M
+innodb_log_buffer_size=16M
+tmp_table_size=16M
+max_heap_table_size=16M
+thread_cache_size=16
+table_open_cache=512

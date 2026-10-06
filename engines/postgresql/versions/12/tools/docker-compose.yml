@@ -2,13 +2,19 @@ services:
   db:
     image: postgres:12
     environment:
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: root
     volumes:
-      - ../conf:/etc/postgresql:ro
-      - ./data:/var/lib/postgresql/data
+      - ../conf/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - ../conf/conf.d/00-base.conf:/etc/postgresql/conf.d/00-base.conf:ro
+      - ../conf/conf.d/10-observability.conf:/etc/postgresql/conf.d/10-observability.conf:ro
+      - ../conf/conf.d/profiles/${DB_PROFILE:-1gb}.conf:/etc/postgresql/conf.d/99-profile.conf:ro
+      - db-data:/var/lib/postgresql/data
     command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 2s
       timeout: 2s
       retries: 30
+
+volumes:
+  db-data:

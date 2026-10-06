@@ -1,3 +1,8 @@
 [mysqld]
-# 4GB profile (пример)
+# 4 GB host: larger cache while keeping headroom for connections and the OS.
 innodb_buffer_pool_size=2G
+innodb_log_buffer_size=64M
+tmp_table_size=64M
+max_heap_table_size=64M
+thread_cache_size=64
+table_open_cache=2048

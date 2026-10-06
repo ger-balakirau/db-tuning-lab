@@ -1,4 +1,8 @@
 [mysqld]
-# Base (safe defaults) — заготовка
+# Common conservative baseline. Workload/RAM-dependent values live in profiles/.
 skip-name-resolve
+default_storage_engine=InnoDB
 innodb_file_per_table=1
+max_connections=100
+wait_timeout=600
+interactive_timeout=600
