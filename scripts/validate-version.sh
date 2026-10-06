@@ -90,7 +90,7 @@ ready=0
 for _ in $(seq 1 60); do
   case "${engine}" in
     mysql|mariadb)
-      if "${compose[@]}" exec -T db mysqladmin ping -uroot -proot --silent >/dev/null 2>&1; then
+      if "${compose[@]}" exec -T db mysql -uroot -proot --batch --skip-column-names -e 'SELECT 1;' >/dev/null 2>&1; then
         ready=1
       fi
       ;;
